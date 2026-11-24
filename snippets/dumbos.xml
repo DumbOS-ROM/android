@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project path="vendor/dumbos" name="android_vendor_dumbos" remote="dumbos" revision="refs/heads/lineage-22.2">
+    <linkfile src="extra/product.mk" dest="vendor/extra/product.mk" />
+  </project>
+  <project path="vendor/partner_gms" name="android_vendor_partner_gms" remote="dumbos" revision="master" />
+</manifest>
