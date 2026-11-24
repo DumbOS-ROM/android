@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <!-- losul additions -->
+  <project path="art" name="android_art-ul" remote="dumbos" />
+  
+  <project path="bionic" name="android_bionic-ul" remote="dumbos" />
+
+  <project path="device/google/cuttlefish" name="android_device_google_cuttlefish" remote="dumbos" />
+  
+  <project path="device/lineage/sepolicy" name="android_device_lineage_sepolicy-ul" remote="dumbos" />
+  <project path="device/qcom/sepolicy-legacy" name="android_device_qcom_sepolicy-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-legacy" />
+  
+  <project path="external/connectivity" name="android_external_connectivity" remote="dumbos" />
+  <project path="external/jemalloc_new" name="android_external_jemalloc_new" remote="dumbos" />
+  <project path="external/perfetto" name="android_external_perfetto" remote="dumbos" />
+  <project path="external/wpa_supplicant_8" name="android_external_wpa_supplicant_8-ul" remote="dumbos" />
+  
+  <project path="frameworks/av" name="android_frameworks_av-ul" remote="dumbos" />
+  <project path="frameworks/base" name="android_frameworks_base-ul" remote="dumbos" />
+  <project path="frameworks/ex" name="android_frameworks_ex" groups="pdk-cw-fs,pdk-fs" remote="dumbos" />
+  <project path="frameworks/native" name="android_frameworks_native-ul" remote="dumbos" />
+  <project path="frameworks/opt/telephony" name="android_frameworks_opt_telephony-ul" remote="dumbos" />
+  <project path="frameworks/opt/net/wifi" name="android_frameworks_opt_net_wifi" remote="dumbos" />
+  
+  <project path="hardware/libhardware_legacy" name="android_hardware_libhardware_legacy-ul" remote="dumbos" />
+
+  <project path="hardware/broadcom/nfc" name="android_hardware_broadcom_nfc" remote="dumbos" />
+  <project path="hardware/interfaces" name="android_hardware_interfaces-ul" remote="dumbos" />
+  <project path="hardware/lineage/interfaces" name="android_hardware_lineage_interfaces-ul" remote="dumbos" />
+  <project path="hardware/ril" name="android_hardware_ril-ul" remote="dumbos" />
+  <project path="hardware/qcom/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" remote="dumbos" />
+  <project path="hardware/qcom/bt" name="android_hardware_qcom_bt-ul" groups="qcom,pdk-qcom" remote="dumbos" />
+  <project path="hardware/qcom/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" remote="dumbos" />
+  <project path="hardware/qcom/gps" name="android_hardware_qcom_gps-ul" groups="qcom,qcom_gps,pdk-qcom" remote="dumbos"/>
+  <project path="hardware/qcom/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" remote="dumbos" />
+  <project path="hardware/qcom-caf/common" name="android_hardware_qcom-caf_common-ul" groups="qcom" >
+    <!-- add guard for AOSP hardware/qcom dir -->
+    <linkfile src="os_pickup_aosp.mk" dest="hardware/qcom/Android.mk" />
+    <!-- add guards for CAF repositories -->
+    <linkfile src="os_pickup_sepolicy_vndr.mk" dest="device/qcom/sepolicy_vndr/SEPolicy.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/msm8953/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8916/Android.mk" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8952/Android.mk" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8953/Android.mk" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8960/Android.mk" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8974/Android.mk" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8994/Android.mk" />
+    <linkfile src="os_pickup.bp" dest="hardware/qcom-caf/msm8996/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8996/Android.mk" />
+    <linkfile src="os_pickup.bp" dest="hardware/qcom-caf/msm8998/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/msm8998/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sdm660/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sdm660/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sdm845/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sdm845/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sm8150/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sm8150/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sm8250/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sm8250/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sm8350/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sm8350/Android.mk" />
+    <linkfile src="os_pickup_audio-ar.mk" dest="hardware/qcom-caf/sm8450/audio/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sm8450/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sm8450/Android.mk" />
+    <linkfile src="os_pickup_audio-ar.mk" dest="hardware/qcom-caf/sm8550/audio/Android.mk" />
+    <linkfile src="os_pickup_qssi.bp" dest="hardware/qcom-caf/sm8550/Android.bp" />
+    <linkfile src="os_pickup.mk" dest="hardware/qcom-caf/sm8550/Android.mk" />
+    <!-- add guards for Pixel kernel modules -->
+    <linkfile src="os_pickup.bp" dest="kernel/google/gs201/private/google-modules/Android.bp" />
+  </project>
+  <project path="hardware/qcom-caf/msm8916/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" revision="lineage-21.0-caf-msm8916" />
+  <project path="hardware/qcom-caf/msm8916/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" revision="lineage-21.0-caf-msm8916" />
+  <project path="hardware/qcom-caf/msm8916/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-caf-msm8916" />
+  <project path="hardware/qcom-caf/msm8952/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" revision="lineage-21.0-caf-msm8952" />
+  <project path="hardware/qcom-caf/msm8952/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" revision="lineage-21.0-caf-msm8952" />
+  <project path="hardware/qcom-caf/msm8952/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-caf-msm8952" />
+  <project path="hardware/qcom-caf/msm8974/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" revision="lineage-21.0-caf-msm8974" />
+  <project path="hardware/qcom-caf/msm8974/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" revision="lineage-21.0-caf-msm8974" />
+  <project path="hardware/qcom-caf/msm8974/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-caf-msm8974" />
+  <project path="hardware/qcom-caf/msm8960/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" revision="lineage-21.0-caf-msm8960" />
+  <project path="hardware/qcom-caf/msm8960/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" revision="lineage-21.0-caf-msm8960" />
+  <project path="hardware/qcom-caf/msm8960/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-caf-msm8960" />
+  <project path="hardware/qcom-caf/msm8994/audio" name="android_hardware_qcom_audio-ul" groups="qcom,qcom_audio,pdk-qcom" revision="lineage-21.0-caf-msm8994" />
+  <project path="hardware/qcom-caf/msm8994/display" name="android_hardware_qcom_display-ul" groups="pdk-qcom,qcom,qcom_display" revision="lineage-21.0-caf-msm8994" />
+  <project path="hardware/qcom-caf/msm8994/media" name="android_hardware_qcom_media-ul" groups="qcom,pdk-qcom" revision="lineage-21.0-caf-msm8994" />
+
+  <project path="packages/apps/Nfc" name="android_packages_apps_Nfc-ul" remote="dumbos" />
+  <project path="packages/modules/adb" name="android_packages_modules_adb-ul" remote="dumbos" />
+  <project path="packages/modules/Bluetooth" name="android_packages_modules_Bluetooth-ul" remote="dumbos" />
+  <project path="packages/modules/Connectivity" name="android_packages_modules_Connectivity-ul" remote="dumbos" />
+  <project path="packages/modules/DeviceLock" name="android_packages_modules_DeviceLock" groups="pdk-cw-fs,pdk-fs" remote="dumbos" />
+  <project path="packages/modules/DnsResolver" name="android_packages_modules_DnsResolver-ul" groups="pdk-cw-fs,pdk-fs" remote="dumbos" />
+  <project path="packages/modules/NetworkStack" name="android_packages_modules_NetworkStack-ul" remote="dumbos" />
+  <project path="packages/services/Telephony" name="android_packages_services_Telephony-ul" remote="dumbos" />
+
+  <project path="prebuilts/abi-dumps/ndk" name="android_prebuilts_abi-dumps_ndk" groups="pdk-fs" clone-depth="1" remote="dumbos" />
+  <project path="prebuilts/build-tools" name="android_prebuilts_build-tools-ul" groups="pdk" clone-depth="1" remote="dumbos" />
+  <project path="prebuilts/sdk" name="android_prebuilts_sdk" groups="pdk" clone-depth="1" remote="dumbos" />
+  
+  <project path="system/bpf" name="android_system_bpf-ul" remote="dumbos" />
+  <project path="system/core" name="android_system_core-ul" remote="dumbos" />
+  <project path="system/libhidl" name="android_system_libhidl-ul" groups="pdk" remote="dumbos" />
+  <project path="system/libhwbinder" name="android_system_libhwbinder" groups="pdk" remote="dumbos" />
+  <project path="system/netd" name="android_system_netd-ul" remote="dumbos" />
+  <project path="system/sepolicy" name="android_system_sepolicy-ul" remote="dumbos" />
+  <project path="system/tools/dtbtool" name="android_system_tools_dtbtool" remote="dumbos" />
+   
+  <project path="vendor/lineage" name="android_vendor_lineage-ul" remote="dumbos" />
+  <project path="vendor/qcom/opensource/power" name="android_vendor_qcom_opensource_power-ul" groups="qcom,waipio-vendor" remote="dumbos" />
+ 
+</manifest>
