@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/dumbos-logo.png" width="160" alt="DumbOS Logo" />
+</p>
+
 # DumbOS (lineage-22.2 — Android 15)
 
 **DumbOS** is a standalone, ultra-lightweight, pure **Black & White (`#000000` / `#FFFFFF`)** Android ROM distribution mirrored and forked under [`github.com/DumbOS-ROM`](https://github.com/DumbOS-ROM).
