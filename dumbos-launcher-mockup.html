@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-0 m-0 select-none">
+  <div class="py-2 flex flex-col md:flex-row gap-4 items-start">
+
+    <!-- PHONE MOCKUP (Left) -->
+    <div class="mx-auto md:mx-0 shrink-0 w-[252px] rounded-[24px] p-[8px] border-2 border-[var(--border)] bg-[#0a0a0a] shadow-lg">
+      <!-- Screen (#000000 Pure Black OLED) -->
+      <div id="phone-screen" class="w-full h-[420px] bg-[#000000] text-[#E0E0E0] rounded-[16px] flex flex-col justify-between overflow-hidden relative font-sans border border-[#1f1f1f] transition-all">
+
+        <!-- Status Bar -->
+        <div class="px-3.5 pt-2 pb-1 flex items-center justify-between text-[11px] text-[#A0A0A0] font-mono shrink-0">
+          <span id="status-left">Telkomsel</span>
+          <div class="flex items-center gap-1.5">
+            <span id="dnd-status-icon" class="hidden text-[#E0E0E0]">⊘</span>
+            <span id="audio-status-icon" class="text-[#E0E0E0]">♪</span>
+            <span id="net-status-icon">4G</span>
+            <span>▂▄▆</span>
+            <span>84%</span>
+          </div>
+        </div>
+
+        <!-- 1. LOCKSCREEN VIEW -->
+        <div id="view-lockscreen" class="flex-1 px-4 py-2 flex flex-col justify-between overflow-hidden">
+          <div class="pt-1 pb-1">
+            <div class="flex items-baseline justify-between">
+              <div class="text-3xl font-light tracking-tight text-[#F0F0F0]">22:15</div>
+              <span id="lock-mode-pill" onclick="cycleMode()" class="text-[10px] font-mono text-[#999999] border border-[#262626] px-1.5 py-0.5 rounded cursor-pointer hover:border-[#555555]">Mode: Normal</span>
+            </div>
+            <div class="text-[11px] text-[#888888]">Minggu, 22 Nov</div>
+          </div>
+
+          <!-- Dynamic Stack (Conditional Audio Player + Notifications) -->
+          <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 my-1.5">
+
+            <!-- CONDITIONAL AUDIO WIDGET -->
+            <div id="lock-audio-card" class="rounded-lg border border-[#262626] bg-[#0b0b0b] p-2.5 space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="min-w-0">
+                  <div class="text-[10px] font-mono text-[#888888]">♪ NEWTUBE (BACKGROUND)</div>
+                  <div id="track-title" class="text-xs font-medium text-[#E8E8E8] truncate">Hindia - Evaluasi (Audio 128kbps)</div>
+                </div>
+              </div>
+              <div class="space-y-0.5">
+                <div class="w-full h-1 bg-[#1f1f1f] rounded overflow-hidden">
+                  <div class="h-full bg-[#D0D0D0] w-2/5"></div>
+                </div>
+                <div class="flex justify-between text-[9px] font-mono text-[#666666]">
+                  <span>01:18</span>
+                  <span>03:14</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-around pt-0.5 text-xs text-[#D0D0D0]">
+                <button onclick="prevTrack()" class="px-2 py-0.5 hover:text-white">⏮</button>
+                <button id="btn-play-pause" onclick="togglePlayPause()" class="px-3 py-0.5 rounded bg-[#1c1c1c] hover:bg-[#2a2a2a] text-white font-mono">⏸</button>
+                <button onclick="nextTrack()" class="px-2 py-0.5 hover:text-white">⏭</button>
+                <button onclick="setAudioActive(false)" title="Matikan Audio" class="text-[10px] font-mono text-[#777777] hover:text-[#f87171]">✕</button>
+              </div>
+            </div>
+
+            <!-- DND / Call-Only Banner on Lockscreen -->
+            <div id="lock-mode-banner" class="hidden rounded-lg border border-[#222222] bg-[#090909] px-2.5 py-2 text-[11px] text-[#999999] font-mono"></div>
+
+            <!-- MINIMALIST NOTIFICATIONS LIST -->
+            <div id="lock-notif-list" class="space-y-1.5">
+              <div onclick="switchScreen('home')" class="rounded-lg border border-[#1d1d1d] bg-[#070707] px-2.5 py-1.5 hover:border-[#333333] cursor-pointer transition">
+                <div class="flex items-center justify-between text-[10px] text-[#777777] font-mono">
+                  <span>WHATSAPP • SEKARANG</span>
+                  <span>●</span>
+                </div>
+                <div class="text-xs font-medium text-[#E0E0E0]">Budi Santoso</div>
+                <div class="text-[11px] text-[#999999] truncate">Besok jadi ketemu jam 8 pagi?</div>
+              </div>
+
+              <div onclick="switchScreen('home')" class="rounded-lg border border-[#1d1d1d] bg-[#070707] px-2.5 py-1.5 hover:border-[#333333] cursor-pointer transition">
+                <div class="flex items-center justify-between text-[10px] text-[#777777] font-mono">
+                  <span>PESAN (SMS) • 14M</span>
+                </div>
+                <div class="text-xs font-medium text-[#E0E0E0]">Telkomsel</div>
+                <div class="text-[11px] text-[#999999] truncate">Kuota utama Anda tersisa 4.2 GB.</div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="switchScreen('home')" class="w-full py-1.5 text-center text-[11px] text-[#777777] hover:text-[#E0E0E0] border-t border-[#141414] font-mono transition">
+            Buka Kunci ke Homescreen →
+          </button>
+        </div>
+
+        <!-- 2. HOMESCREEN VIEW (Opsi 1 + Mode Switcher Bar) -->
+        <div id="view-home" class="hidden flex-1 px-5 py-2 flex flex-col justify-between overflow-hidden">
+          <div class="pt-1 flex items-start justify-between">
+            <div>
+              <div class="text-2xl font-light tracking-tight text-[#E0E0E0]">22:15</div>
+              <div class="text-[11px] text-[#888888]">Minggu, 22 Nov</div>
+            </div>
+            <div class="flex flex-col items-end gap-1">
+              <button onclick="cycleMode()" id="home-mode-pill" class="text-[10px] font-mono text-[#B0B0B0] hover:text-white border border-[#262626] px-1.5 py-0.5 rounded">
+                Mode: Normal
+              </button>
+              <button onclick="switchScreen('lockscreen')" class="text-[10px] font-mono text-[#666666] hover:text-white">🔒 Kunci</button>
+            </div>
+          </div>
+
+          <div id="fav-list" class="my-auto space-y-2 py-2"></div>
+
+          <button onclick="switchScreen('drawer')" class="w-full py-1.5 text-left text-[11px] text-[#666666] hover:text-[#E0E0E0] transition flex items-center justify-between border-t border-[#161616]">
+            <span>Semua Aplikasi</span>
+            <span class="font-mono">↑</span>
+          </button>
+        </div>
+
+        <!-- 3. APP DRAWER VIEW -->
+        <div id="view-drawer" class="hidden flex-1 px-4 py-1 flex flex-col overflow-hidden">
+          <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-[#1c1c1c]">
+            <span class="text-[11px] uppercase tracking-wider text-[#777777] font-mono">Daftar A-Z (Tanpa Ikon)</span>
+            <button onclick="switchScreen('home')" class="text-[11px] text-[#888888] hover:text-[#E0E0E0] font-mono">✕</button>
+          </div>
+          <div id="drawer-list" class="flex-1 overflow-y-auto no-scrollbar space-y-1 pr-1 text-[13px]"></div>
+        </div>
+
+        <!-- 4. SIMULATED RUNNING APP -->
+        <div id="view-app" class="hidden flex-1 px-4 py-3 flex flex-col justify-between bg-[#050505]">
+          <div class="flex items-center justify-between border-b border-[#1c1c1c] pb-2">
+            <span id="active-app-title" class="text-xs font-medium text-[#E0E0E0]">WhatsApp</span>
+            <span id="active-app-mode" class="text-[10px] font-mono text-[#666666] px-1.5 py-0.5 rounded bg-[#141414]">Aktif</span>
+          </div>
+          <div class="my-auto text-center space-y-2 px-2">
+            <div class="text-xs text-[#999999]">Profil <span class="text-[#E0E0E0] font-mono">ro.config.low_ram=true</span></div>
+            <div id="active-app-note" class="text-[11px] text-[#666666]">Push notifikasi via microG FCM aktif</div>
+          </div>
+          <div class="text-[10px] text-center text-[#555555] font-mono">Gunakan tombol navigasi di bawah</div>
+        </div>
+
+        <!-- 5. RECENTS / OVERVIEW -->
+        <div id="view-recents" class="hidden flex-1 px-4 py-2 flex flex-col justify-between bg-[#080808]">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono text-[#888888]">Recents (1-Proses QuickStepGo)</span>
+            <button onclick="switchScreen('home')" class="text-[11px] text-[#999999] hover:text-white underline">Hapus Semua</button>
+          </div>
+          <div class="my-auto border border-[#262626] rounded-lg p-3 bg-[#000000] space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="recent-card-title" class="text-xs font-medium text-[#E0E0E0]">WhatsApp</span>
+              <span class="text-[10px] font-mono text-[#666666]">~48 MB</span>
+            </div>
+            <div class="h-24 rounded bg-[#0c0c0c] border border-[#1a1a1a] flex items-center justify-center text-[11px] text-[#666666] px-2 text-center">
+              Snapshot low-res Android Go (1 proses dengan Launcher)
+            </div>
+            <button onclick="openApp(lastOpenedApp)" class="w-full py-1 text-[11px] bg-[#181818] hover:bg-[#242424] rounded text-[#E0E0E0]">
+              Buka Kembali
+            </button>
+          </div>
+          <div class="text-[10px] font-mono text-[#666666] text-center">
+            Opsi 1: Home + Recents menyatu (~16 MB)
+          </div>
+        </div>
+
+        <!-- 3-Button Navigation Bar -->
+        <div class="h-9 bg-[#000000] border-t border-[#141414] flex items-center justify-around px-6 shrink-0">
+          <button onclick="navBack()" title="Back" class="w-10 h-7 flex items-center justify-center text-[#B0B0B0] hover:text-white active:scale-90 transition text-sm">◁</button>
+          <button onclick="switchScreen('home')" title="Home" class="w-10 h-7 flex items-center justify-center text-[#B0B0B0] hover:text-white active:scale-90 transition text-sm">○</button>
+          <button onclick="switchScreen('recents')" title="Recents / Overview" class="w-10 h-7 flex items-center justify-center text-[#B0B0B0] hover:text-white active:scale-90 transition text-xs">▢</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS & DUMBPHONE MODES PANEL (Right) -->
+    <div class="flex-1 min-w-0 space-y-3 w-full">
+
+      <!-- Screen Switcher -->
+      <div class="border-b border-[var(--card-border)] pb-2">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-semibold text-[var(--foreground)]">Simulasi Layar & 4 Mode Prioritas Dumbphone</span>
+          <span class="text-xs font-mono text-[var(--success)]">0 MB Background Overhead</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <button onclick="switchScreen('lockscreen')" id="pill-lockscreen" class="px-2.5 py-1 rounded border">🔒 Lockscreen</button>
+          <button onclick="switchScreen('home')" id="pill-home" class="px-2.5 py-1 rounded border">🏠 Homescreen</button>
+          <button onclick="switchScreen('drawer')" id="pill-drawer" class="px-2.5 py-1 rounded border">📋 App Drawer</button>
+          <button onclick="switchScreen('recents')" id="pill-recents" class="px-2.5 py-1 rounded border">▢ Recents</button>
+        </div>
+      </div>
+
+      <!-- 4 Dumbphone Modes Selector (/system/bin/dumbos-mode) -->
+      <div class="space-y-1.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold">Pilih Mode Dumbphone (<code class="font-mono">/system/bin/dumbos-mode</code>):</span>
+          <button onclick="setAudioActive(!audioActive)" id="btn-audio-toggle" class="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--card-border)]">
+            ♪ Audio Lockscreen: ON
+          </button>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button id="mode-0" onclick="setDumbMode(0)" class="p-2 rounded border text-left transition">
+            <div class="font-semibold">1. Mode Normal</div>
+            <div class="text-[11px] text-[var(--muted-foreground)]">4G/Wi-Fi aktif, push FCM jalan, hemat RAM latar.</div>
+          </button>
+          <button id="mode-1" onclick="setDumbMode(1)" class="p-2 rounded border text-left transition">
+            <div class="font-semibold">2. Mode Fokus (DND)</div>
+            <div class="text-[11px] text-[var(--muted-foreground)]">Sembunyikan notif chat; hanya telepon favorit/darurat masuk.</div>
+          </button>
+          <button id="mode-2" onclick="setDumbMode(2)" class="p-2 rounded border text-left transition">
+            <div class="font-semibold">3. Hanya Telepon & SMS</div>
+            <div class="text-[11px] text-[var(--muted-foreground)]">Matikan data/Wi-Fi total. Murni HP jadul (baterai 3-5 hari).</div>
+          </button>
+          <button id="mode-3" onclick="setDumbMode(3)" class="p-2 rounded border text-left transition">
+            <div class="font-semibold">4. Mode Malam (B&W)</div>
+            <div class="text-[11px] text-[var(--muted-foreground)]">Layar hitam-putih hardware (Daltonizer) + DND + Battery Saver.</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Mode Technical Details -->
+      <div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--card-border)] space-y-1 text-xs">
+        <div id="mode-detail-title" class="font-semibold text-[var(--foreground)]">Mode Aktif: Normal (dumbos-mode normal)</div>
+        <p id="mode-detail-desc" class="text-[11px] text-[var(--muted-foreground)] leading-relaxed">
+          Semua aplikasi esensial aktif. Layar tidak menyala sendiri saat notifikasi masuk (<code class="font-mono">doze_enabled=0</code>) agar bebas distraksi.
+        </p>
+      </div>
+
+      <!-- Stripped Features Summary (Wellbeing, Safety, Guest User) -->
+      <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+        <div class="p-2 rounded border border-[var(--card-border)]">
+          <div class="font-semibold text-[var(--foreground)]">Wellbeing: Dihapus</div>
+          <div class="text-[var(--muted-foreground)]"><code class="font-mono">config_systemWellbeing</code> dikosongkan.</div>
+        </div>
+        <div class="p-2 rounded border border-[var(--card-border)]">
+          <div class="font-semibold text-[var(--foreground)]">Safety/Alert: Dihapus</div>
+          <div class="text-[var(--muted-foreground)]"><code class="font-mono">EmergencyInfo</code> & <code class="font-mono">CellBroadcast</code> dibuang.</div>
+        </div>
+        <div class="p-2 rounded border border-[var(--card-border)]">
+          <div class="font-semibold text-[var(--foreground)]">Guest User: Mati</div>
+          <div class="text-[var(--muted-foreground)]"><code class="font-mono">fw.max_users=1</code> (Hanya 1 Owner).</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const favApps = [
+      { name: "Telepon", note: "AOSP Dialer • Integrasi RIL langsung (~18 MB)", offlineOk: true },
+      { name: "Pesan", note: "AOSP Messaging • SMS/MMS tanpa background bloat", offlineOk: true },
+      { name: "WhatsApp", note: "Push real-time via microG FCM • Media via DocumentsUI", offlineOk: false },
+      { name: "NewTube", note: "Streaming 480p/720p • Background audio ke Lockscreen", offlineOk: false },
+      { name: "Kamera", note: "Aperture Camera • Ringan & kompatibel Camera2", offlineOk: true },
+      { name: "Catatan", note: "Markor Plain-Text/Markdown • Footprint < 15 MB", offlineOk: true },
+      { name: "Aurora Store", note: "Session Installer native Android 13 • Auto-update mati", offlineOk: false },
+      { name: "Pengaturan", note: "Settings tanpa animasi (scale 0.0)", offlineOk: true }
+    ];
+
+    const allApps = [
+      { group: "A", items: ["Aurora Store"] },
+      { group: "C", items: ["Catatan (Markor)"] },
+      { group: "F", items: ["File (DocumentsUI)"] },
+      { group: "J", items: ["Jam & Alarm"] },
+      { group: "K", items: ["Kamera (Aperture)", "Kontak"] },
+      { group: "M", items: ["microG Settings"] },
+      { group: "N", items: ["NewTube"] },
+      { group: "P", items: ["Pengaturan", "Pesan (SMS)"] },
+      { group: "T", items: ["Telepon"] },
+      { group: "W", items: ["WhatsApp"] }
+    ];
+
+    const modes = [
+      {
+        id: "normal",
+        label: "Mode: Normal",
+        cmd: "dumbos-mode normal",
+        desc: "Semua aplikasi esensial aktif. Layar tidak menyala sendiri saat notifikasi masuk (doze_enabled=0) agar hemat baterai & bebas distraksi.",
+        banner: ""
+      },
+      {
+        id: "dnd",
+        label: "Mode: Fokus (DND)",
+        cmd: "dumbos-mode dnd",
+        desc: "Memakai ZenMode native Android 13 (0 MB RAM). Notifikasi visual disembunyikan dari Lockscreen; hanya panggilan kontak prioritas/darurat yang berbunyi.",
+        banner: "⊘ Mode Fokus Aktif • Notifikasi chat disembunyikan, hanya telepon darurat/favorit yang masuk."
+      },
+      {
+        id: "call-only",
+        label: "Mode: Telepon & SMS",
+        cmd: "dumbos-mode call-only",
+        desc: "Mematikan Mobile Data & Wi-Fi (svc data/wifi disable) + Battery Saver. Mengubah smartphone 100% menjadi Feature Phone murni (baterai tahan 3-5 hari).",
+        banner: "✆ Mode Hanya Telepon & SMS • Data internet dimatikan total untuk menghemat RAM & baterai."
+      },
+      {
+        id: "night-bw",
+        label: "Mode: Malam (B&W)",
+        cmd: "dumbos-mode night-bw",
+        desc: "Mengaktifkan hardware Grayscale SurfaceFlinger (accessibility_display_daltonizer=0) + DND. Seluruh aplikasi (termasuk foto/video WhatsApp & NewTube) tampil hitam-putih.",
+        banner: "◐ Mode Malam Hitam-Putih • Layar monokrom anti-dopamin & DND aktif."
+      }
+    ];
+
+    const tracks = [
+      "Hindia - Evaluasi (Audio 128kbps)",
+      "NewTube Podcast - Sejarah Komputer",
+      "Efek Rumah Kaca - Desember"
+    ];
+    let trackIdx = 0;
+    let isPlaying = true;
+    let audioActive = true;
+    let currentModeIdx = 0;
+    let currentView = "lockscreen";
+    let lastOpenedApp = favApps[2];
+
+    function renderFavs() {
+      const callOnly = currentModeIdx === 2;
+      document.getElementById("fav-list").innerHTML = favApps.map((app, i) => {
+        const dimmed = callOnly && !app.offlineOk;
+        return `
+          <button onclick="openAppByIndex(${i})"
+            class="w-full text-left py-0.5 text-[15px] font-normal ${dimmed ? 'text-[#555555] line-through' : 'text-[#E0E0E0] hover:text-white'} hover:translate-x-1 transition-all flex items-center justify-between group">
+            <span>${app.name}</span>
+            <span class="text-[10px] font-mono text-[#555555] opacity-0 group-hover:opacity-100">${dimmed ? 'offline' : 'buka →'}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderDrawer() {
+      document.getElementById("drawer-list").innerHTML = allApps.map(section => `
+        <div class="pt-1.5">
+          <div class="text-[10px] font-mono text-[#666666] pb-0.5">${section.group}</div>
+          ${section.items.map(item => `
+            <button onclick="openAppByName('${item}')"
+              class="w-full text-left py-1 pl-2 text-[13px] text-[#D8D8D8] hover:text-white hover:bg-[#111111] rounded transition">
+              ${item}
+            </button>
+          `).join("")}
+        </div>
+      `).join("");
+    }
+
+    function setDumbMode(idx) {
+      currentModeIdx = idx;
+      const m = modes[idx];
+      document.getElementById("lock-mode-pill").textContent = m.label;
+      document.getElementById("home-mode-pill").textContent = m.label;
+      document.getElementById("mode-detail-title").textContent = `Mode Aktif: ${m.label} (${m.cmd})`;
+      document.getElementById("mode-detail-desc").textContent = m.desc;
+
+      // Status bar & notification behavior
+      document.getElementById("dnd-status-icon").classList.toggle("hidden", idx !== 1 && idx !== 3);
+      document.getElementById("net-status-icon").textContent = idx === 2 ? "2G" : "4G";
+      document.getElementById("phone-screen").style.filter = idx === 3 ? "grayscale(100%) contrast(1.08)" : "none";
+
+      // Lockscreen notifications visibility in DND
+      const banner = document.getElementById("lock-mode-banner");
+      const notifs = document.getElementById("lock-notif-list");
+      if (m.banner) {
+        banner.textContent = m.banner;
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+      notifs.classList.toggle("hidden", idx === 1);
+
+      [0, 1, 2, 3].forEach(i => {
+        const btn = document.getElementById("mode-" + i);
+        btn.className = "p-2 rounded border text-left transition " +
+          (i === idx
+            ? "border-[var(--primary)] bg-[var(--card)] text-[var(--foreground)]"
+            : "border-[var(--card-border)] text-[var(--muted-foreground)] opacity-80 hover:opacity-100");
+      });
+
+      renderFavs();
+    }
+
+    function cycleMode() {
+      setDumbMode((currentModeIdx + 1) % modes.length);
+    }
+
+    function setAudioActive(active) {
+      audioActive = active;
+      document.getElementById("lock-audio-card").classList.toggle("hidden", !active);
+      document.getElementById("audio-status-icon").classList.toggle("hidden", !active);
+      const toggleBtn = document.getElementById("btn-audio-toggle");
+      toggleBtn.textContent = active ? "♪ Audio Lockscreen: ON" : "🔇 Audio Lockscreen: OFF";
+    }
+
+    function togglePlayPause() {
+      isPlaying = !isPlaying;
+      document.getElementById("btn-play-pause").textContent = isPlaying ? "⏸" : "▶";
+    }
+
+    function nextTrack() {
+      trackIdx = (trackIdx + 1) % tracks.length;
+      document.getElementById("track-title").textContent = tracks[trackIdx];
+    }
+
+    function prevTrack() {
+      trackIdx = (trackIdx - 1 + tracks.length) % tracks.length;
+      document.getElementById("track-title").textContent = tracks[trackIdx];
+    }
+
+    function openAppByIndex(idx) { openApp(favApps[idx]); }
+    function openAppByName(name) {
+      const found = favApps.find(a => name.startsWith(a.name)) || {
+        name: name,
+        note: "Berjalan dengan pembatas Dalvik Heap 96m/128m",
+        offlineOk: true
+      };
+      openApp(found);
+    }
+
+    function openApp(app) {
+      lastOpenedApp = app;
+      document.getElementById("active-app-title").textContent = app.name;
+      document.getElementById("active-app-note").textContent =
+        (currentModeIdx === 2 && !app.offlineOk)
+          ? "Mode Hanya Telepon & SMS aktif: Koneksi internet diblokir sementara."
+          : app.note;
+      document.getElementById("active-app-mode").textContent = modes[currentModeIdx].label;
+      document.getElementById("recent-card-title").textContent = app.name;
+      switchScreen("app");
+    }
+
+    function switchScreen(view) {
+      currentView = view;
+      ["lockscreen", "home", "drawer", "app", "recents"].forEach(v => {
+        document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
+      });
+      ["lockscreen", "home", "drawer", "recents"].forEach(v => {
+        const pill = document.getElementById("pill-" + v);
+        if (pill) {
+          pill.className = "px-2.5 py-1 rounded border transition " +
+            (v === view
+              ? "border-[var(--primary)] bg-[var(--card)] font-medium text-[var(--foreground)]"
+              : "border-[var(--card-border)] text-[var(--muted-foreground)]");
+        }
+      });
+      document.getElementById("status-left").textContent = view === "lockscreen" ? "Telkomsel" : "22:15";
+    }
+
+    function navBack() {
+      if (currentView !== "home" && currentView !== "lockscreen") {
+        switchScreen("home");
+      }
+    }
+
+    renderFavs();
+    renderDrawer();
+    setDumbMode(0);
+    setAudioActive(true);
+    switchScreen("lockscreen");
+  </script>
+</body>
+</html>
